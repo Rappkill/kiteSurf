@@ -4,7 +4,7 @@ import reportWebVitals from './reportWebVitals';
 import LoginForm from "./login";
 import './App.css';
 import App from './App.tsx';
-import FetchSpot from './FetchSpot'
+
 
 
 ReactDOM.render(<App/>, document.getElementById("root"));
