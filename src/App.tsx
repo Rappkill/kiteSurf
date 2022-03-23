@@ -4,32 +4,69 @@ import './App.css';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 import "tachyons";
-import List from "./searchBox";
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 function App() {
   const [data, setData] = useState([]);
-
-
-  const [inputText, setInputText] = useState("");
-  let inputHandler = (e) => {
-    //convert input text to lower case
-    var lowerCase = e.target.value.toLowerCase();
-    setInputText(lowerCase);
-  };
-
+  const [favorite, setFavorite] = useState([]);
+  const [cls, setCls] = useState('btn btn-warning');
+  const [buttonText, setButtonText] = useState("Add me to favorite!")
+  
 
   useEffect(()=>{
     async function fetchData() {
-      const kiteSpots = await axios.get('https://62376095b08c39a3af7fdb55.mockapi.io/spot');
-        setData(kiteSpots.data)
-      }
+      const kiteSpots = await axios.get('https://62376095b08c39a3af7fdb55.mockapi.io/spot')
+        .then(response => {
+          setData(response.data)
+          }).catch((err) => {
+            console.log(err)
+          })
+        
+      const favorites = await axios.get('https://62376095b08c39a3af7fdb55.mockapi.io/favourites')
+        .then(response => {
+          setFavorite(response.data)
+          }).catch((err) => {
+            console.log(err)
+          })
+        }
       fetchData();
     },[]);
 
-  
+    
+    // const addToFavorite = favorite.map(dat => {
+    //   console.log(dat.id);
+    //   // if (!fav.includes(id)) setFav(fav.concat(id));
+    // });
+
+    const addToFavorite = id => {
+      if (!favorite.includes(id)) setFavorite(favorite.concat(id));
+      };
+    
+    
+    // const removeFavorite = id => {
+    //   let index = favorite.indexOf(id);
+    //   console.log(index);
+    //   let temp = [...favorite.slice(0, index), ...favorite.slice(index + 1)];
+    //   setFavorite(temp);
+    // };
+
+    let findfavorite = data.filter(spot => favorite.includes(spot.id));
+    console.log(findfavorite);
+
  return (
 
   <div>
+
+    <div className ='dropdown'>
+        <DropdownButton variant='warning'id="dropdown-basic-button" title="Favorites">
+      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+      <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+      <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+    </DropdownButton>
+    </div>
+
+
     <MapContainer center={[45.9432, 24.9668]} zoom={3} scrollWheelZoom={true}>
      <TileLayer
     attribution='&copy; <a href="https://www.opensteetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -43,8 +80,14 @@ function App() {
             <h2>Spot</h2>
             <h3>Country: {data.country}</h3>
             <h3>Name: {data.name}</h3>
-            <h3>Best Month: {data.month}</h3>
-            <button className='btn btn-warning'>Add me to favourites</button>
+            <h3>Best Month: {data.month}</h3> 
+            
+            <button className={cls} 
+              onClick = {() => {
+                addToFavorite(data.id); 
+                setCls((cls) => (cls === 'btn btn-warning' ? 'btn btn-danger' : 'btn btn-warning'));
+                setButtonText(text => (text === "Add me to favorite!" ? "Remove Favorite" : "Add me to favorite!"));}}> {buttonText}
+            </button>
         </div>
       </Popup>
     </Marker>
@@ -56,9 +99,8 @@ function App() {
     <div className='pa3 search'>
       <h3>Location</h3>
       <div>
-		  <input className ='pa2 ba b--yellow bg-lightest-yellow' type='search' placeholder= 'Search' onChange={inputHandler} />
+		  <input className ='pa2 ba b--yellow bg-lightest-yellow' type='search' placeholder= 'Search' />
       </div>
-      <List input={inputText} />
       </div>
 
     <div className="table-responsive-md">
@@ -93,4 +135,3 @@ function App() {
 }
 
 export default App;
-

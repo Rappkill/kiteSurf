@@ -2,3 +2,10 @@
   width: 100vw;
   height: 70vh;
 }
+.dropdown {
+  text-align: right;
+}
+
+.dropdown-menu {
+  text-align: center;
+}
