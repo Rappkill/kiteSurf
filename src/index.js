@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import LoginForm from "./login";
 import './App.css';
 import App from './App.tsx';
+import Dashboard from './Dashboard'
 
-
-
-ReactDOM.render(<App/>, document.getElementById("root"));
+// const user = {
+//     userId: 1234,
+//     Id: 132
+// }
+ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
