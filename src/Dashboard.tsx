@@ -1,6 +1,6 @@
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import { useEffect, useState } from 'react';
 import * as L from "leaflet";
 import axios from "axios";
@@ -8,10 +8,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import "tachyons";
 import { UserType } from './App';
 import React from 'react';
+import AddNewMarker from './Addmarker'
+
+
 
 const API_URL = 'https://62376095b08c39a3af7fdb55.mockapi.io';
 
-const IconStyleOne = L.icon({
+export const IconStyleOne = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png'
 });
 const IconStyleTwo = L.icon({
@@ -26,9 +29,8 @@ const Dashboard = ({ user }: { user: UserType }) => {
   const [spot, setSpot] = useState<any>([]);
   const [favorite, setFavorite] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // const [marker, setMarker] = useState([45.9432, 24.9668]);
   const [icon, setIcon] = useState(IconStyleTwo);
-
+  
 
   useEffect(() => {
     /**
@@ -56,11 +58,12 @@ const Dashboard = ({ user }: { user: UserType }) => {
   }, [user]);
 
 
+ const handleLogout = () => {
+    localStorage.clear();
+    window.location.href='./Login'
+ };
 
-  // const addMarker = event => {
-  //   console.log('click');
-
-  // }
+  
   const handleChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -77,7 +80,7 @@ const Dashboard = ({ user }: { user: UserType }) => {
   }, [searchTerm, spot]);
 
 
-  const addToFavorite = (id: any) => {
+ const addToFavorite = (id: any) => {
     if (!favorite.includes(id)) setFavorite(favorite.concat(id));
   };
 
@@ -103,17 +106,18 @@ const Dashboard = ({ user }: { user: UserType }) => {
     <div style={{ margin: 'auto', width: '80%' }}>
 
       <div className='dropdown'>
-        <DropdownButton variant='warning' id="dropdown-basic-button" title="Favorites" >
+        <DropdownButton variant='warning' id="dropdown-basic-button" title="Favorites">
           {findfavorite.map((spot: any) => <Dropdown.Item key={spot.id}>{spot.name} <button onClick={() => { removeFavorite(spot.id) }}>Remove</button></Dropdown.Item>)}
         </DropdownButton>
+        <button style={{background:"grey"}} onClick={handleLogout}>Logout</button>
       </div>
 
-      <MapContainer style={{ width: '100%' }} center={[45.9432, 24.9668]} zoom={3} scrollWheelZoom={true}>
+      <MapContainer style={{ width: '100%', cursor:'pointer' }} center={[45.9432, 24.9668]} zoom={4} scrollWheelZoom={true} >
         <TileLayer
           attribution='&copy; <a href="https://www.opensteetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
+        
         {spot.map((spot: any) => (
           <Marker key={spot.id} position={[Number(spot.lat), Number(spot.long)]} icon={icon} >
             <Popup position={[Number(spot.lat), Number(spot.long)]}>
@@ -134,6 +138,7 @@ const Dashboard = ({ user }: { user: UserType }) => {
             </Popup>
           </Marker>
         ))}
+        <AddNewMarker />
       </MapContainer>
 
       <div className="table-responsive-md">
@@ -144,7 +149,7 @@ const Dashboard = ({ user }: { user: UserType }) => {
           value={searchTerm} onChange={handleChange} />
         <table className="table table-bordered table-striped">
           <thead>
-            <tr className="col-md-10 padding-0 text-center">
+            <tr className="col-md-5 padding-0 text-center">
               <th>Name</th>
               <th>Country</th>
               <th>Latitude</th>
