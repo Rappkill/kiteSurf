@@ -9,6 +9,7 @@ const user = {
     userId: 1234,
     Id: 132
 }
+
 ReactDOM.render(<Dashboard user={user} />, document.getElementById("root"));
 // ReactDOM.render(<App />, document.getElementById("root"));
 

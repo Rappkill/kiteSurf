@@ -9,3 +9,8 @@
 .dropdown-menu {
   text-align: center;
 }
+
+.container {
+  margin: '10px';
+  width: '1000%'
+}

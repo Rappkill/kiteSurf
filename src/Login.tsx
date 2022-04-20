@@ -22,12 +22,12 @@ export default function LoginPage({ handleLogin }: any) {
   return (
     <div style={{ width: '80%', margin: 'auto', textAlign: 'center' }}>
       <h1>Login</h1>
-      <input type="text" placeholder='Username' onChange={e => setUsername(e.target.value)} />
+        <input type="text" placeholder='Username' onChange={e => setUsername(e.target.value)} />
       <br />
-      <input type="password" placeholder='Password' onChange={e => setPassword(e.target.value)} />
+        <input type="password" placeholder='Password' onChange={e => setPassword(e.target.value)} />
       <br />
-      <input type="button" value='Login' onClick={login} />
-      {error && <p>{error}</p>}
+        <input type="button" value='Login' onClick={login} />
+            {error && <p>{error}</p>}
     </div>
   );
 }

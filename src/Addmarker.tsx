@@ -17,7 +17,6 @@ const [marker, setMarker] = useState<any|null>([])
       marker.push(e.latlng);
       map.flyTo(e.latlng, 6);
       setMarker((prevValue) => [...prevValue, e.latlng]);
-      console.log(marker)
     }
   });
 
